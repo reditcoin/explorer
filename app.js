@@ -59,8 +59,12 @@ app.use('/ext/getmoneysupply', function(req,res){
 });
 
 app.use('/ext/getaddress/:hash', function(req,res){
+  req.query.length = parseInt(req.query.length);
+  if(isNaN(req.query.length) || req.query.length > settings.txcount){
+    req.query.length = settings.txcount;
+  }
   db.get_address(req.params.hash, function(address){
-    db.get_address_txs_ajax(req.params.hash, 0, settings.txcount, function(txs, count){
+    db.get_address_txs_ajax(req.params.hash, 0, req.query.length, function(txs, count){
       if (address) {
         var last_txs = [];
         for(i=0; i<txs.length; i++){
@@ -82,8 +86,11 @@ app.use('/ext/getaddress/:hash', function(req,res){
             if (vin > out) {
               tx_type = 'vin';
             }
+            row['date'] = new Date((txs[i].timestamp) * 1000).toUTCString();
             row['addresses'] = txs[i].txid;
             row['type'] = tx_type;
+            row['amount'] = ((vin-out) / 100000000);
+            row['balance'] = (txs[i].balance / 100000000);
             last_txs.push(row);
           }
         }
