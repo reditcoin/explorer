@@ -89,7 +89,7 @@ app.use('/ext/getaddress/:hash', function(req,res){
             row['date'] = new Date((txs[i].timestamp) * 1000).toUTCString();
             row['addresses'] = txs[i].txid;
             row['type'] = tx_type;
-            row['amount'] = ((vin-out) / 100000000);
+            row['amount'] = ((out-vin) / 100000000);
             row['balance'] = (txs[i].balance / 100000000);
             last_txs.push(row);
           }
