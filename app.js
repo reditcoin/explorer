@@ -145,7 +145,7 @@ app.use('/ext/gettx/:txid', function(req, res) {
                     blockindex: rtx.blockheight,
                   };
                   lib.get_blockcount(function(blockcount) {
-                    res.send({ active: 'tx', tx: utx, confirmations: settings.confirmations, blockcount: blockcount});
+                    res.send({ active: 'tx', tx: utx, confirmations: settings.confirmations, blockcount:-1});
                   });
                 }
               });
